@@ -4,7 +4,7 @@
       "id": "342d",
       "name": "Dark Nhân Tâm",
       "category": "Books",
-      "price": 50,
+      "price": 55,
       "description": "Hay quá",
       "stock": 10
     },
@@ -15,6 +15,14 @@
       "price": 20,
       "description": "Haha",
       "stock": 12
+    },
+    {
+      "id": "c2e4",
+      "name": "Tủ Lạnh",
+      "category": "Electronics",
+      "price": 2000,
+      "description": "Đẹp",
+      "stock": 4
     }
   ],
   "users": [
