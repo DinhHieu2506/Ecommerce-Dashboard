@@ -11,7 +11,7 @@ function App() {
       <div className="min-h-screen bg-gray-100">
         <NavBar />
 
-        {/* Responsive padding */}
+        
         <div className="px-4 py-4 sm:px-6 lg:px-8">
           <Routes>
             <Route path="/" element={<Navigate to="/products" replace />} />

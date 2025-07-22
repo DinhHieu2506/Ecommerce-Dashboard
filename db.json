@@ -9,14 +9,6 @@
       "stock": 10
     },
     {
-      "id": "af53",
-      "name": "Quả bóng",
-      "category": "Sports",
-      "price": 20,
-      "description": "Haha",
-      "stock": 12
-    },
-    {
       "id": "c2e4",
       "name": "Tủ Lạnh",
       "category": "Electronics",
@@ -46,7 +38,8 @@
       "id": "2",
       "userId": "3",
       "productIds": [
-        "342d"
+        "342d",
+        "c2e4"
       ],
       "status": "shipped",
       "totalPrice": 0,
