@@ -3,7 +3,6 @@ import axios from "axios";
 
 const PRODUCTS_URL = "http://localhost:3000/products";
 
-// Async Thunks
 export const fetchProducts = createAsyncThunk("products/fetchProducts", async () => {
   const res = await axios.get(PRODUCTS_URL);
   return res.data;
@@ -20,24 +19,22 @@ export const updateProduct = createAsyncThunk("products/updateProduct", async (p
 });
 
 export const deleteProduct = createAsyncThunk("products/deleteProduct", async (id, thunkAPI) => {
-  // Xoá product
+  
   await axios.delete(`${PRODUCTS_URL}/${id}`);
 
-  // Lấy tất cả orders
   const ordersRes = await axios.get("http://localhost:3000/orders");
   const orders = ordersRes.data;
 
-  // Lọc ra các orders chứa productId vừa xóa
   const ordersToUpdateOrDelete = orders.filter(order => order.productIds.includes(id));
 
   for (const order of ordersToUpdateOrDelete) {
     const updatedProductIds = order.productIds.filter(pid => pid !== id);
 
     if (updatedProductIds.length === 0) {
-      // Xoá đơn hàng nếu không còn sản phẩm nào
+     
       await axios.delete(`http://localhost:3000/orders/${order.id}`);
     } else {
-      // Cập nhật lại đơn hàng với danh sách sản phẩm mới
+      
       await axios.put(`http://localhost:3000/orders/${order.id}`, {
         ...order,
         productIds: updatedProductIds
@@ -45,11 +42,9 @@ export const deleteProduct = createAsyncThunk("products/deleteProduct", async (i
     }
   }
 
-  return id; // Trả lại id để cập nhật trong store
+  return id; 
 });
 
-
-// Slice
 const productsSlice = createSlice({
   name: "products",
   initialState: {
@@ -58,14 +53,14 @@ const productsSlice = createSlice({
     error: null,
   },
   reducers: {
-    // ✅ Action để reset lỗi
+   
     clearError: (state) => {
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Fetch
+ 
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -79,7 +74,6 @@ const productsSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // Add
       .addCase(addProduct.fulfilled, (state, action) => {
         state.products.push(action.payload);
       })
@@ -87,7 +81,6 @@ const productsSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // Update
       .addCase(updateProduct.fulfilled, (state, action) => {
         const index = state.products.findIndex(p => p.id === action.payload.id);
         if (index !== -1) {
@@ -98,7 +91,6 @@ const productsSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // Delete
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = state.products.filter(p => p.id !== action.payload);
       })
@@ -108,6 +100,5 @@ const productsSlice = createSlice({
   },
 });
 
-// ✅ Export action và reducer
 export const { clearError } = productsSlice.actions;
 export default productsSlice.reducer;

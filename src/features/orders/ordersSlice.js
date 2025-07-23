@@ -14,7 +14,6 @@ const calculateTotalPrice = async (productIds) => {
   }, 0);
 };
 
-
 export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
   
   const [ordersRes, productsRes] = await Promise.all([
@@ -25,7 +24,6 @@ export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
   const orders = ordersRes.data;
   const products = productsRes.data;
 
-  
   const enrichedOrders = orders.map(order => {
     const totalPrice = order.productIds.reduce((sum, id) => {
       const product = products.find(p => p.id === id);
@@ -38,7 +36,6 @@ export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
 });
 
 
-
 export const updateOrderStatus = createAsyncThunk(
   "orders/updateOrderStatus",
   async ({ id, status }) => {
@@ -47,14 +44,12 @@ export const updateOrderStatus = createAsyncThunk(
   }
 );
 
-
 export const addOrder = createAsyncThunk("orders/addOrder", async (order) => {
   const totalPrice = await calculateTotalPrice(order.productIds);
   const fullOrder = { ...order, totalPrice, createdAt: new Date().toISOString() };
   const res = await axios.post(baseUrl, fullOrder);
   return res.data;
 });
-
 
 export const updateOrder = createAsyncThunk("orders/updateOrder", async (order) => {
   const totalPrice = await calculateTotalPrice(order.productIds);

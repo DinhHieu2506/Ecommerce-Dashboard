@@ -9,7 +9,7 @@ export default function OrderForm({ open, onClose }) {
   const dispatch = useDispatch();
 
   const order = useSelector((state) => state.orders.selectedOrder);
-  const products = useSelector((state) => state.products.products); // ✅ đúng key
+  const products = useSelector((state) => state.products.products);
 
   const handleStatusChange = (value) => {
     dispatch(updateOrderStatus({ id: order.id, status: value }));
