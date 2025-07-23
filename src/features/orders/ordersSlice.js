@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const baseUrl = "http://localhost:3000/orders";
-const productsUrl = "http://localhost:3000/products";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const baseUrl = `${API_BASE_URL}/orders`;
+const productsUrl = `${API_BASE_URL}/products`;
 
 
 const calculateTotalPrice = async (productIds) => {

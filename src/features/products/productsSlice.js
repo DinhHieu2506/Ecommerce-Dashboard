@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const PRODUCTS_URL = "http://localhost:3000/products";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const PRODUCTS_URL = `${API_BASE_URL}/products`;
+const ORDERS_URL = `${API_BASE_URL}/orders`;
 
 export const fetchProducts = createAsyncThunk("products/fetchProducts", async () => {
   const res = await axios.get(PRODUCTS_URL);
@@ -18,11 +20,10 @@ export const updateProduct = createAsyncThunk("products/updateProduct", async (p
   return res.data;
 });
 
-export const deleteProduct = createAsyncThunk("products/deleteProduct", async (id, thunkAPI) => {
-  
+export const deleteProduct = createAsyncThunk("products/deleteProduct", async (id) => {
   await axios.delete(`${PRODUCTS_URL}/${id}`);
 
-  const ordersRes = await axios.get("http://localhost:3000/orders");
+  const ordersRes = await axios.get(ORDERS_URL);
   const orders = ordersRes.data;
 
   const ordersToUpdateOrDelete = orders.filter(order => order.productIds.includes(id));
@@ -31,18 +32,16 @@ export const deleteProduct = createAsyncThunk("products/deleteProduct", async (i
     const updatedProductIds = order.productIds.filter(pid => pid !== id);
 
     if (updatedProductIds.length === 0) {
-     
-      await axios.delete(`http://localhost:3000/orders/${order.id}`);
+      await axios.delete(`${ORDERS_URL}/${order.id}`);
     } else {
-      
-      await axios.put(`http://localhost:3000/orders/${order.id}`, {
+      await axios.put(`${ORDERS_URL}/${order.id}`, {
         ...order,
-        productIds: updatedProductIds
+        productIds: updatedProductIds,
       });
     }
   }
 
-  return id; 
+  return id;
 });
 
 const productsSlice = createSlice({
@@ -53,14 +52,12 @@ const productsSlice = createSlice({
     error: null,
   },
   reducers: {
-   
     clearError: (state) => {
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
- 
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -73,14 +70,12 @@ const productsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-
       .addCase(addProduct.fulfilled, (state, action) => {
         state.products.push(action.payload);
       })
       .addCase(addProduct.rejected, (state, action) => {
         state.error = action.error.message;
       })
-
       .addCase(updateProduct.fulfilled, (state, action) => {
         const index = state.products.findIndex(p => p.id === action.payload.id);
         if (index !== -1) {
@@ -90,7 +85,6 @@ const productsSlice = createSlice({
       .addCase(updateProduct.rejected, (state, action) => {
         state.error = action.error.message;
       })
-
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = state.products.filter(p => p.id !== action.payload);
       })
