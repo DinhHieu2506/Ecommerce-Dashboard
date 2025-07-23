@@ -49,7 +49,7 @@
         "342d",
         "c2e4"
       ],
-      "status": "processing",
+      "status": "shipped",
       "totalPrice": 0,
       "createdAt": "2025-07-18T09:30:00.000Z"
     },
@@ -60,7 +60,7 @@
         "342d",
         "275b"
       ],
-      "status": "delivered",
+      "status": "shipped",
       "totalPrice": 0,
       "createdAt": "2025-07-23T09:30:00.000Z"
     }
